@@ -16,7 +16,6 @@ from openfisca_core.indexed_enums import Enum, ENUM_ARRAY_DTYPE
 from openfisca_core.periods import DAY, MONTH, YEAR, ETERNITY
 from openfisca_core.base_functions import (
     missing_value,
-    requested_period_last_or_next_value,
     requested_period_last_value,
     )
 from openfisca_core.commons import basestring_type, to_unicode
@@ -269,7 +268,6 @@ class Variable(object):
 
         if base_function and base_function not in {
                 missing_value,
-                requested_period_last_or_next_value,
                 requested_period_last_value
                 }:
             raise ValueError('Unexpected base_function {}'.format(base_function).encode('utf-8'))
