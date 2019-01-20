@@ -149,10 +149,6 @@ class Simulation(object):
         # First, try to run a formula
         array = self._run_formula(variable, entity, period, extra_params, max_nb_cycles)
 
-        # If no result, try a base function
-        if array is None and variable.base_function:
-            array = variable.base_function(holder, period, *extra_params)
-
         # If no result, use the default value
         if array is None:
             array = holder.default_array()
