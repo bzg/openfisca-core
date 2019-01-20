@@ -10,15 +10,6 @@
 from __future__ import unicode_literals, print_function, division, absolute_import
 
 
-def requested_period_default_value(holder, period, *extra_params):
-    """
-        This formula is used for variables for which we don't want to make any inference about the value for a given period based on past or future values.
-
-        Having this `base_function` is strictly equivalent to not having a `base_function`, but it can still be needed to overwrite an unwanted default `base_function`.
-    """
-    return None
-
-
 def requested_period_last_value(holder, period, *extra_params, **kwargs):
     """
         This formula is used for variables that are constants between events and period size independent.
