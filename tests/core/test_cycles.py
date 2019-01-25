@@ -117,7 +117,7 @@ tax_benefit_system.add_variables(variable1, variable2, variable3, variable4,
 reference_period = periods.period('2013-01')
 
 
-@raises(AssertionError)
+@raises(CycleError)
 def test_pure_cycle():
     simulation = tax_benefit_system.new_scenario().init_from_attributes(
         period = reference_period,
