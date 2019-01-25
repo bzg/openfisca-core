@@ -257,7 +257,7 @@ class Simulation(object):
             self._clean_cycle_detection_data(variable.name)
         except SpiralError as spiral:
             if self.tracer:
-                self.tracer._computation_log.append(["spiral_"+ variable.name +  ":" + str(period), 1])
+                self.tracer._computation_log.append(["spiral_" + variable.name + ":" + str(period), 1])
             return None  # Use default value
 
         self._check_formula_result(array, variable, entity, period)
@@ -342,7 +342,6 @@ class Simulation(object):
             raise SpiralError(message)
 
         self.computation_stack.append([variable.name, str(period)])
-
 
     def _clean_cycle_detection_data(self, variable_name):
         """
