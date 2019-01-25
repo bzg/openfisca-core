@@ -277,6 +277,8 @@ class Variable(object):
             raise ValueError('Unexpected base_function {}'.format(base_function).encode('utf-8'))
 
         if self.is_period_size_independent and base_function is None:
+            if self.end is not None:
+	            return requested_period_default_value
             return requested_period_last_value
 
         return base_function
