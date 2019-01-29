@@ -6,7 +6,7 @@ from nose.tools import raises
 
 from openfisca_core import periods
 from openfisca_core.periods import MONTH
-from openfisca_core.simulations import CycleError
+from openfisca_core.simulations import CycleError, SpiralError
 from openfisca_core.variables import Variable
 
 from openfisca_country_template import CountryTaxBenefitSystem
@@ -60,7 +60,7 @@ class variable5(Variable):
     definition_period = MONTH
 
     def formula(person, period):
-        variable6 = person('variable6', period.last_month, max_nb_cycles = 0)
+        variable6 = person('variable6', period.last_month)
         return 5 + variable6
 
 
@@ -125,15 +125,15 @@ def test_pure_cycle():
     simulation.calculate('variable1', period = reference_period)
 
 
-@raises(CycleError)
-def test_cycle_time_offset():
+def test_spirals_result_in_default_value():
     simulation = tax_benefit_system.new_scenario().init_from_attributes(
         period = reference_period,
         ).new_simulation(debug = True)
-    simulation.calculate('variable3', period = reference_period)
+    variable3 = simulation.calculate('variable3', period = reference_period)
+    assert_near(variable3, [0])
 
 
-def test_allowed_cycle():
+def test_spiral_heuristic():
     """
     Calculate variable5 then variable6 then in the order order, to verify that the first calculated variable
     has no effect on the result.
@@ -141,12 +141,13 @@ def test_allowed_cycle():
     simulation = tax_benefit_system.new_scenario().init_from_attributes(
         period = reference_period,
         ).new_simulation(debug = True)
-    variable6 = simulation.calculate('variable6', period = reference_period)
-    variable5 = simulation.calculate('variable5', period = reference_period)
-    variable6_last_month = simulation.calculate('variable6', reference_period.last_month)
-    assert_near(variable5, [5])
-    assert_near(variable6, [11])
-    assert_near(variable6_last_month, [0])
+    variable5 = simulation.calculate('variable5', period = reference_period, trace=True)
+    variable6 = simulation.calculate('variable6', period = reference_period, trace=True)
+    variable6_last_month = simulation.calculate('variable6', reference_period.last_month, trace=True)
+    simulation.tracer.print_computation_log()
+    assert_near(variable5, [16])
+    assert_near(variable6, [22])
+    assert_near(variable6_last_month, [22])
 
 
 def test_allowed_cycle_different_order():
