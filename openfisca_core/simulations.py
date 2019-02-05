@@ -157,6 +157,8 @@ class Simulation(object):
         if array is None:
             array = holder.default_array()
 
+        array = self._cast_formula_result(array, variable)
+
         self._clean_cycle_detection_data(variable.name)
         if max_nb_cycles is not None:
             self.max_nb_cycles = None
@@ -265,7 +267,7 @@ class Simulation(object):
             return None
 
         self._check_formula_result(array, variable, entity, period)
-        return self._cast_formula_result(array, variable)
+        return array
 
     def _check_period_consistency(self, period, variable):
         """
